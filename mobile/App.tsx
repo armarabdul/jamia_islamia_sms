@@ -39,6 +39,7 @@ export default function App() {
   // Settings Modal
   const [showSettings, setShowSettings] = useState(false);
   const [apiBaseUrl, setApiBaseUrl] = useState('');
+  const [academicYearId, setAcademicYearId] = useState<string>('');
 
   // Role Data
   const [classes, setClasses] = useState<any[]>([]);
@@ -140,6 +141,13 @@ export default function App() {
 
       // Teacher Flow
       if (role === 'TEACHER' || role === 'ADMIN') {
+        const yearRes = await apiClient.get('/academic/years/');
+        const years = yearRes.data.results || yearRes.data;
+        const currentYear = years.find((y: any) => y.is_current) || years[0];
+        if (currentYear) {
+          setAcademicYearId(currentYear.id);
+        }
+
         const classRes = await apiClient.get('/academic/classes/');
         const clsList = classRes.data.results || classRes.data;
         setClasses(clsList);
@@ -199,8 +207,19 @@ export default function App() {
       const res = await apiClient.get(`/students/?section_id=${secId}`);
       const list = res.data.results || res.data;
       setStudents(list);
+
+      const today = new Date().toISOString().split('T')[0];
+      let records: any[] = [];
+      try {
+        const attRes = await apiClient.get(`/attendance/records/?section_id=${secId}&date=${today}`);
+        records = attRes.data.results || attRes.data;
+      } catch {}
+
       const initMap: Record<string, any> = {};
-      list.forEach((st: any) => { initMap[st.id] = 'PRESENT'; });
+      list.forEach((st: any) => {
+        const existing = records.find((r: any) => (r.student === st.id || r.student_id === st.id));
+        initMap[st.id] = existing ? existing.status : 'PRESENT';
+      });
       setAttendanceMap(initMap);
       OfflineSyncManager.cacheReadData(`students_${secId}`, list);
     } catch {
@@ -228,6 +247,19 @@ export default function App() {
 
   // 5. Submit Attendance (Real API with offline mutation fallback)
   const submitAttendance = async () => {
+    let yearId = academicYearId;
+    if (!yearId) {
+      try {
+        const yRes = await apiClient.get('/academic/years/');
+        const yList = yRes.data.results || yRes.data;
+        const cur = yList.find((y: any) => y.is_current) || yList[0];
+        if (cur) {
+          yearId = cur.id;
+          setAcademicYearId(cur.id);
+        }
+      } catch {}
+    }
+
     const records = Object.entries(attendanceMap).map(([studentId, status]) => ({
       student_id: studentId,
       status,
@@ -235,6 +267,7 @@ export default function App() {
     }));
 
     const payload = {
+      academic_year_id: yearId,
       class_room_id: selectedClass,
       section_id: selectedSection,
       date: new Date().toISOString().split('T')[0],
@@ -255,6 +288,7 @@ export default function App() {
     try {
       setIsLoading(true);
       await apiClient.post('/attendance/records/bulk-mark/', payload);
+      setNetworkState('ONLINE');
       Alert.alert(
         isUrdu ? 'کامیابی' : 'Success',
         isUrdu ? 'حاضری کامیابی سے درج کرلی گئی ہے۔' : 'Attendance submitted successfully to Jamia Islamia server.'

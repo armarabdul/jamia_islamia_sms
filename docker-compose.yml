@@ -56,6 +56,7 @@ services:
       - "8000:8000"
     environment:
       - DJANGO_DEBUG=True
+      - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,10.0.2.2,web,backend,testserver
       - DB_ENGINE=django.db.backends.postgresql
       - DB_HOST=db
       - DB_NAME=jamia_islamia_db

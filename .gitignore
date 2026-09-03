@@ -36,6 +36,7 @@ media/
 backend/media/
 backend/logs/
 *.log
+celerybeat-schedule*
 
 # Environments & Secrets
 .env
