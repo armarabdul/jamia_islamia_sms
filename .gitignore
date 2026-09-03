@@ -1,0 +1,95 @@
+# ==============================================================================
+# Jamia Islamia School Management System - Git Ignore Rules
+# ==============================================================================
+
+# Python & Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.sqlite3
+db.sqlite3
+backend/db.sqlite3
+local_settings.py
+staticfiles/
+backend/staticfiles/
+media/
+backend/media/
+backend/logs/
+*.log
+
+# Environments & Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+*.crt
+*.p8
+*.mobileprovision
+google-services.json
+*service-account*.json
+ssl/
+
+# Node / React / Web
+node_modules/
+web/node_modules/
+dist/
+web/dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# React Native & Expo
+.expo/
+mobile/.expo/
+.expo-shared/
+mobile/.expo-shared/
+mobile/node_modules/
+web-build/
+android/.gradle/
+android/local.properties
+ios/Pods/
+
+# Backups & Database Archives
+*.sql
+*.sql.gz
+*.dump
+*.backup
+*.tar
+*.tar.gz
+backups/
+
+# IDE & OS Artifacts
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.cache/

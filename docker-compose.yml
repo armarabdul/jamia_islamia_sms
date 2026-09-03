@@ -1,0 +1,141 @@
+version: '3.8'
+
+networks:
+  jamia_dev_network:
+    name: jamia_dev_network
+    driver: bridge
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: jamia_dev_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jamia_islamia_db
+      POSTGRES_USER: jamia_admin
+      POSTGRES_PASSWORD: jamia_secure_password_2026
+    ports:
+      - "5433:5432"
+    volumes:
+      - jamia_postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - jamia_dev_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jamia_admin -d jamia_islamia_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: jamia_dev_redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - jamia_redis_dev_data:/data
+    networks:
+      - jamia_dev_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jamia_dev_backend
+    restart: unless-stopped
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+      - jamia_backend_dev_media:/app/media
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_DEBUG=True
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_HOST=db
+      - DB_NAME=jamia_islamia_db
+      - DB_USER=jamia_admin
+      - DB_PASSWORD=jamia_secure_password_2026
+      - DB_PORT=5432
+      - REDIS_URL=redis://redis:6379/1
+    networks:
+      - jamia_dev_network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jamia_dev_celery
+    restart: unless-stopped
+    command: celery -A config worker -l info
+    volumes:
+      - ./backend:/app
+    environment:
+      - DJANGO_DEBUG=True
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_HOST=db
+      - DB_NAME=jamia_islamia_db
+      - DB_USER=jamia_admin
+      - DB_PASSWORD=jamia_secure_password_2026
+      - DB_PORT=5432
+      - REDIS_URL=redis://redis:6379/1
+    networks:
+      - jamia_dev_network
+    depends_on:
+      - backend
+      - redis
+
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jamia_dev_celery_beat
+    restart: unless-stopped
+    command: celery -A config beat -l info
+    volumes:
+      - ./backend:/app
+    environment:
+      - DJANGO_DEBUG=True
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_HOST=db
+      - DB_NAME=jamia_islamia_db
+      - DB_USER=jamia_admin
+      - DB_PASSWORD=jamia_secure_password_2026
+      - DB_PORT=5432
+      - REDIS_URL=redis://redis:6379/1
+    networks:
+      - jamia_dev_network
+    depends_on:
+      - backend
+      - redis
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: jamia_dev_web
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    networks:
+      - jamia_dev_network
+    depends_on:
+      - backend
+
+volumes:
+  jamia_postgres_dev_data:
+    name: jamia_postgres_dev_data
+  jamia_redis_dev_data:
+    name: jamia_redis_dev_data
+  jamia_backend_dev_media:
+    name: jamia_backend_dev_media
