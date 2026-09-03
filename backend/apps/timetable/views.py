@@ -1,4 +1,5 @@
 from rest_framework import viewsets, generics, permissions
+from rest_framework.exceptions import PermissionDenied
 from .models import TimetableEntry
 from .serializers import TimetableEntrySerializer
 from apps.parents.models import ParentStudentRelation
@@ -62,9 +63,17 @@ class MyScheduleView(generics.ListAPIView):
         if getattr(user, 'role', '') == 'PARENT':
             child_id = self.request.query_params.get('student_id')
             if child_id:
-                enrollment = Student.objects.filter(id=child_id).first().enrollments.filter(is_active=True).first()
-                if enrollment:
-                    return qs.filter(section=enrollment.section)
+                is_linked = ParentStudentRelation.objects.filter(
+                    parent__user=user,
+                    student_id=child_id
+                ).exists()
+                if not is_linked and not user.is_superuser:
+                    raise PermissionDenied('Access denied.')
+                student = Student.objects.filter(id=child_id).first()
+                if student:
+                    enrollment = student.enrollments.filter(is_active=True).first()
+                    if enrollment:
+                        return qs.filter(section=enrollment.section)
             return TimetableEntry.objects.none()
 
         return qs

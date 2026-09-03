@@ -117,8 +117,17 @@ class StudentAttendanceSummaryView(generics.GenericAPIView):
     def get(self, request, student_id):
         user = request.user
         # Authorization check
-        if getattr(user, 'role', '') == 'STUDENT' and str(getattr(user.student_profile, 'id', '')) != str(student_id):
-            return Response({'detail': 'Access denied.'}, status=status.HTTP_403_FORBIDDEN)
+        if getattr(user, 'role', '') == 'STUDENT':
+            student_profile = getattr(user, 'student_profile', None)
+            if not student_profile or str(student_profile.id) != str(student_id):
+                return Response({'detail': 'Access denied.'}, status=status.HTTP_403_FORBIDDEN)
+        elif getattr(user, 'role', '') == 'PARENT':
+            is_linked = ParentStudentRelation.objects.filter(
+                parent__user=user,
+                student_id=student_id
+            ).exists()
+            if not is_linked and not user.is_superuser:
+                return Response({'detail': 'Access denied.'}, status=status.HTTP_403_FORBIDDEN)
         
         aggregates = AttendanceRecord.objects.filter(
             student_id=student_id, 
