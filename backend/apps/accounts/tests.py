@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -11,6 +12,7 @@ User = get_user_model()
 
 class AuthenticationAndAuthorizationTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.client = APIClient()
         self.admin = User.objects.create_user(
             username='admin_test',
@@ -28,6 +30,10 @@ class AuthenticationAndAuthorizationTests(TestCase):
             password='TestPassword123!',
             role=User.Role.STUDENT
         )
+
+    def tearDown(self):
+        cache.clear()
+        super().tearDown()
 
     def test_jwt_login_returns_token_and_role(self):
         res = self.client.post('/api/v1/auth/login/', {
