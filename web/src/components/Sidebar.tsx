@@ -17,7 +17,8 @@ import {
   BarChart3, 
   UploadCloud, 
   ShieldCheck, 
-  User as UserProfileIcon
+  X,
+  Sparkles
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -97,47 +98,67 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {isOpen && (
         <div 
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden animate-fade-in"
         />
       )}
 
-      <aside
-        className={`fixed inset-y-0 start-0 z-50 w-64 flex flex-col border-e border-white/10 bg-slate-900/95 backdrop-blur-xl transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto ${
-          isOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full lg:rtl:translate-x-0'
-        }`}
-      >
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          {links.map((item) => {
-            const Icon = item.icon;
+      {/* Sidebar Container */}
+      <aside className={`
+        fixed lg:static inset-y-0 start-0 z-40
+        w-64 flex flex-col
+        bg-[var(--bg-sidebar)] text-[var(--text-sidebar)]
+        border-e border-[var(--border-subtle)]
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Mobile Header Close */}
+        <div className="flex items-center justify-between p-4 border-b border-white/10 lg:hidden">
+          <div className="font-bold text-sm text-emerald-400">Jamia Islamia Menu</div>
+          <button 
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Navigation Section */}
+        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+          <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+            {role} Portal
+          </div>
+          {links.map((link) => {
+            const Icon = link.icon;
             return (
               <NavLink
-                key={item.to}
-                to={item.to}
+                key={link.to}
+                to={link.to}
                 onClick={onClose}
-                end={item.to === '/'}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md shadow-emerald-950/50'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
-                  }`
-                }
+                className={({ isActive }) => `
+                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold
+                  transition-all duration-150
+                  ${isActive 
+                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-900/30' 
+                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                  }
+                `}
               >
-                <Icon className="w-4 h-4 shrink-0" />
-                <span>{item.label}</span>
+                <Icon className="w-4 h-4 rtl-mirror opacity-90" />
+                <span>{link.label}</span>
               </NavLink>
             );
           })}
         </div>
 
-        {/* Footer info */}
-        <div className="p-3 border-t border-white/10 text-center">
-          <div className="text-[11px] font-medium text-emerald-400">
-            Jamia Islamia Bhatkal
+        {/* Institutional Footer Stamp */}
+        <div className="p-4 border-t border-white/10 bg-black/20">
+          <div className="flex items-center gap-2 text-xs text-slate-400">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span className="font-semibold text-slate-300">Jamia Islamia</span>
           </div>
-          <div className="text-[10px] text-slate-500">
-            v1.0.0 Production Core
-          </div>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            Bhatkal, Karnataka • v1.0.0
+          </p>
         </div>
       </aside>
     </>

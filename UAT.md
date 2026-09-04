@@ -1,5 +1,5 @@
 # Jamia Islamia - User Acceptance Testing (UAT) Specification
-**Institution**: Jamia Islamia, Nawayath Colony, Bhatkal, Karnataka, India  
+**Institution**: Jamia Islamia, Bhatkal, Karnataka, India  
 **Target Milestone**: Milestone 4 — Release Candidate Validation  
 
 ---

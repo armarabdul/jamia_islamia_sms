@@ -1,12 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Globe, Lock, User as UserIcon, ShieldAlert, Sparkles, CheckCircle } from 'lucide-react';
+import { 
+  Globe, 
+  Lock, 
+  User as UserIcon, 
+  ShieldAlert, 
+  Sparkles, 
+  Sun, 
+  Moon,
+  GraduationCap,
+  ShieldCheck,
+  BookOpen,
+  Users
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { Card, Button } from '../components/ui';
 
 export const LoginPage: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { login, language, changeLanguage } = useAuth();
+  const { resolvedTheme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('admin');
@@ -38,143 +53,170 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-slate-950 relative overflow-hidden">
-      
-      {/* Background Islamic Accents */}
-      <div className="absolute -top-40 -start-40 w-96 h-96 rounded-full bg-emerald-600/20 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -end-40 w-96 h-96 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6 bg-[var(--bg-app)] relative overflow-hidden transition-colors">
+      {/* Background Islamic Geometric Accents */}
+      <div className="absolute -top-40 -start-40 w-96 h-96 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -end-40 w-96 h-96 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-md relative z-10 animate-fade-in">
-        
-        {/* Language switch */}
-        <div className="flex justify-end mb-4">
+      {/* Top Header Utilities */}
+      <div className="w-full max-w-md flex justify-between items-center mb-4 z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-emerald-700 flex items-center justify-center text-amber-300 font-bold shadow-xs">
+            <span className="text-base font-serif">ج</span>
+          </div>
+          <span className="font-bold text-sm text-[var(--text-primary)]">Jamia Islamia</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {/* Theme Switcher */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] shadow-xs transition-all"
+            title="Toggle theme"
+          >
+            {resolvedTheme === 'light' ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+          </button>
+
+          {/* Language Switcher */}
           <button
             onClick={() => changeLanguage(language === 'en' ? 'ur' : 'en')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-semibold text-slate-300 hover:text-white transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] shadow-xs transition-all"
           >
-            <Globe className="w-3.5 h-3.5 text-emerald-400" />
+            <Globe className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             <span>{language === 'en' ? 'اردو' : 'English'}</span>
           </button>
         </div>
+      </div>
 
-        {/* Card Container */}
-        <div className="glass-panel-glow p-6 sm:p-8">
-          
-          {/* Institution Header */}
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-amber-400/40 mx-auto flex items-center justify-center text-amber-300 text-3xl font-serif shadow-xl shadow-emerald-950 mb-3">
-              ج
+      {/* Main Login Card */}
+      <Card className="w-full max-w-md relative z-10 shadow-lg border-[var(--border-subtle)] bg-[var(--bg-surface)] p-6 sm:p-8 animate-fade-in">
+        {/* Institution Header */}
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border border-amber-400/40 mx-auto flex items-center justify-center text-amber-300 text-3xl font-serif shadow-lg shadow-emerald-900/20 mb-3">
+            ج
+          </div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
+            {isUrdu ? 'جامعہ اسلامیہ' : 'Jamia Islamia'}
+          </h1>
+          <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
+            {isUrdu ? 'بھٹکل، کرناٹک' : 'Bhatkal, Karnataka'}
+          </p>
+          <div className="mt-2 text-xs text-[var(--text-muted)]">
+            {t('auth.login_subtitle')}
+          </div>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleLogin} className="space-y-4">
+          {error && (
+            <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
-              {isUrdu ? 'جامعہ اسلامیہ بھٹکل' : 'Jamia Islamia'}
-            </h1>
-            <p className="text-xs text-emerald-400 font-medium mt-0.5">
-              {isUrdu ? 'نوایت کالونی، بھٹکل، کرناٹک' : 'Nawayath Colony, Bhatkal, Karnataka'}
-            </p>
-            <div className="mt-2 text-xs text-slate-400">
-              {t('auth.login_subtitle')}
+          )}
+
+          <div>
+            <label className="form-label">
+              {t('auth.username')}
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className="form-input ps-9"
+                placeholder="e.g. admin, teacher_ahmed"
+              />
+              <UserIcon className="w-4 h-4 text-[var(--text-muted)] absolute start-3 top-3.5" />
             </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
-            {error && (
-              <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/30 text-red-400 text-xs flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                {t('auth.username')}
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                  className="input-field ps-9"
-                  placeholder="e.g. admin, teacher_ahmed"
-                />
-                <UserIcon className="w-4 h-4 text-slate-400 absolute start-3 top-3" />
-              </div>
+          <div>
+            <label className="form-label">
+              {t('auth.password')}
+            </label>
+            <div className="relative">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="form-input ps-9"
+              />
+              <Lock className="w-4 h-4 text-[var(--text-muted)] absolute start-3 top-3.5" />
             </div>
+          </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                {t('auth.password')}
-              </label>
-              <div className="relative">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="input-field ps-9"
-                />
-                <Lock className="w-4 h-4 text-slate-400 absolute start-3 top-3" />
+          <Button
+            type="submit"
+            variant="primary"
+            size="lg"
+            isLoading={isLoading}
+            className="w-full mt-2"
+          >
+            {t('auth.sign_in_button')}
+          </Button>
+        </form>
+
+        {/* Quick Demo Credentials */}
+        <div className="mt-6 pt-4 border-t border-[var(--border-subtle)]">
+          <div className="text-[11px] font-bold text-[var(--text-muted)] mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>{t('auth.demo_accounts')}</span>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => setDemoCredentials('admin', 'JamiaAdmin2026!')}
+              className="p-2.5 rounded-xl bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] border border-[var(--border-subtle)] hover:border-emerald-500/40 text-start transition-all"
+            >
+              <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
+                <ShieldCheck className="w-3 h-3" />
+                <span>Admin</span>
               </div>
-            </div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">admin</div>
+            </button>
 
             <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full btn btn-primary py-2.5 text-sm mt-2"
+              type="button"
+              onClick={() => setDemoCredentials('teacher_ahmed', 'JamiaPass2026!')}
+              className="p-2.5 rounded-xl bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] border border-[var(--border-subtle)] hover:border-emerald-500/40 text-start transition-all"
             >
-              {isLoading ? t('common.loading') : t('auth.sign_in_button')}
+              <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
+                <BookOpen className="w-3 h-3" />
+                <span>Teacher</span>
+              </div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">teacher_ahmed</div>
             </button>
-          </form>
 
-          {/* Quick Demo Credentials */}
-          <div className="mt-6 pt-4 border-t border-white/10">
-            <div className="text-[11px] font-semibold text-slate-400 mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              <span>{t('auth.demo_accounts')}</span>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <button
-                type="button"
-                onClick={() => setDemoCredentials('admin', 'JamiaAdmin2026!')}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-start hover:border-emerald-500/30 transition-all"
-              >
-                <div className="font-semibold text-emerald-400">Administrator</div>
-                <div className="text-[10px] text-slate-400">admin</div>
-              </button>
+            <button
+              type="button"
+              onClick={() => setDemoCredentials('parent_tariq', 'JamiaPass2026!')}
+              className="p-2.5 rounded-xl bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] border border-[var(--border-subtle)] hover:border-amber-500/40 text-start transition-all"
+            >
+              <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-400">
+                <Users className="w-3 h-3" />
+                <span>Parent</span>
+              </div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">parent_tariq</div>
+            </button>
 
-              <button
-                type="button"
-                onClick={() => setDemoCredentials('teacher_ahmed', 'JamiaPass2026!')}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-start hover:border-emerald-500/30 transition-all"
-              >
-                <div className="font-semibold text-emerald-400">Teacher</div>
-                <div className="text-[10px] text-slate-400">teacher_ahmed</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDemoCredentials('parent_tariq', 'JamiaPass2026!')}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-start hover:border-emerald-500/30 transition-all"
-              >
-                <div className="font-semibold text-amber-400">Parent</div>
-                <div className="text-[10px] text-slate-400">parent_tariq</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setDemoCredentials('student_zaid', 'JamiaPass2026!')}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 text-start hover:border-emerald-500/30 transition-all"
-              >
-                <div className="font-semibold text-amber-400">Student</div>
-                <div className="text-[10px] text-slate-400">student_zaid</div>
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setDemoCredentials('student_zaid', 'JamiaPass2026!')}
+              className="p-2.5 rounded-xl bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] border border-[var(--border-subtle)] hover:border-amber-500/40 text-start transition-all"
+            >
+              <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-400">
+                <GraduationCap className="w-3 h-3" />
+                <span>Student</span>
+              </div>
+              <div className="text-[10px] text-[var(--text-muted)] mt-0.5">student_zaid</div>
+            </button>
           </div>
-
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

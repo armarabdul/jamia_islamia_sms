@@ -1,5 +1,5 @@
 # 🏫 Jamia Islamia School Management System
-### *Nawayath Colony, Bhatkal, Karnataka, India*
+### *Bhatkal, Karnataka, India*
 
 [![Built with Python](https://img.shields.io/badge/Backend-Django_5_&_DRF-092E20?style=for-the-badge&logo=django)](https://www.djangoproject.com/)
 [![Built with React](https://img.shields.io/badge/Frontend-React_18_&_TypeScript-20232A?style=for-the-badge&logo=react)](https://react.dev/)
@@ -114,20 +114,20 @@ bash scripts/verify_backup.sh /var/backups/jamia/database/jamia_db_backup_latest
 ---
 
 ## 📚 Complete Documentation Suite
-- [Production Deployment Guide](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/DEPLOYMENT.md)
-- [Staging Environment Guide](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/STAGING.md)
-- [Backup & Disaster Recovery](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/BACKUP_AND_RESTORE.md)
-- [Security & Hardening Guide](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/SECURITY.md)
-- [Performance & Database Guide](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/PERFORMANCE.md)
-- [System Architecture](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/docs/architecture.md)
-- [Database Schema & ERD](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/docs/database.md)
-- [Internationalization & RTL](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/docs/internationalization.md)
-- [Offline Sync Architecture](file:///c:/Users/Home/Downloads/jamia_islamia_nawayath/docs/offline-sync.md)
+- [Production Deployment Guide](./DEPLOYMENT.md)
+- [Staging Environment Guide](./STAGING.md)
+- [Backup & Disaster Recovery](./BACKUP_AND_RESTORE.md)
+- [Security & Hardening Guide](./SECURITY.md)
+- [Performance & Database Guide](./PERFORMANCE.md)
+- [System Architecture](./docs/architecture.md)
+- [Database Schema & ERD](./docs/database.md)
+- [Internationalization & RTL](./docs/internationalization.md)
+- [Offline Sync Architecture](./docs/offline-sync.md)
 
 ---
 
 ## 🏛️ Institution Details
 - **School Name**: Jamia Islamia (*جامعہ اسلامیہ*)
-- **Address**: Nawayath Colony, Bhatkal, Karnataka, India - 581320
+- **Address**: Jamia Islamia, Bhatkal, Karnataka, India - 581320
 - **Website**: https://jamiaislamia.edu.in
 - **Email**: info@jamiaislamia.edu

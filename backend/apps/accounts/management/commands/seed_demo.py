@@ -29,8 +29,8 @@ class Command(BaseCommand):
             defaults={
                 'name': 'Jamia Islamia',
                 'name_urdu': 'جامعہ اسلامیہ',
-                'address': 'Nawayath Colony, Bhatkal, Karnataka, India',
-                'address_urdu': 'نوایت کالونی، بھٹکل، کرناٹک، بھارت',
+                'address': 'Bhatkal, Karnataka, India',
+                'address_urdu': 'بھٹکل، کرناٹک، بھارت',
                 'phone': '+91 8386 220000',
                 'email': 'info@jamiaislamia.edu',
                 'website': 'https://jamiaislamia.edu.in',
@@ -196,7 +196,7 @@ class Command(BaseCommand):
 
         # Parents
         parents_data = [
-            ('parent_tariq', 'Tariq', 'Siddiqui', 'طارق صدیقی', 'Amina Siddiqui', '+91 98450 11111', 'Business', 'Nawayath Colony, Bhatkal'),
+            ('parent_tariq', 'Tariq', 'Siddiqui', 'طارق صدیقی', 'Amina Siddiqui', '+91 98450 11111', 'Business', 'Main Road, Bhatkal'),
             ('parent_salman', 'Salman', 'Ruknuddin', 'سلمان رکن الدین', 'Zainab Ruknuddin', '+91 98450 22222', 'Architect', 'Main Road, Bhatkal'),
         ]
         created_parents = []

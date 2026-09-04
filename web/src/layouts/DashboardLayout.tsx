@@ -10,10 +10,10 @@ export const DashboardLayout: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-slate-950">
+      <div className="flex h-screen w-full items-center justify-center bg-[var(--bg-app)]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin" />
-          <div className="text-emerald-400 font-semibold text-sm">Jamia Islamia Portal Loading...</div>
+          <div className="text-[var(--text-primary)] font-bold text-sm">Jamia Islamia Portal Loading...</div>
         </div>
       </div>
     );
@@ -24,13 +24,13 @@ export const DashboardLayout: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] transition-colors">
       <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       
       <div className="flex-1 flex overflow-hidden">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[var(--bg-app)]">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

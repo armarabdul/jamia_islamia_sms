@@ -11,7 +11,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'jamia-islamia-insecure-dev-key-chan
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,web,backend,testserver').split(',')
+default_allowed = 'localhost,127.0.0.1,0.0.0.0,web,backend,testserver'
+if DEBUG:
+    default_allowed += ',10.0.2.2'
+
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', default_allowed).split(',')
 
 # Application definition
 INSTALLED_APPS = [

@@ -21,8 +21,8 @@ class CurrentSchoolView(generics.RetrieveUpdateAPIView):
             defaults={
                 'name': 'Jamia Islamia',
                 'name_urdu': 'جامعہ اسلامیہ',
-                'address': 'Nawayath Colony, Bhatkal, Karnataka, India',
-                'address_urdu': 'نوایت کالونی، بھٹکل، کرناٹک، بھارت',
+                'address': 'Bhatkal, Karnataka, India',
+                'address_urdu': 'بھٹکل، کرناٹک، بھارت',
                 'email': 'info@jamiaislamia.edu',
                 'phone': '+91 8386 220000',
                 'settings': {

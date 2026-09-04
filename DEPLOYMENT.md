@@ -1,5 +1,5 @@
 # Jamia Islamia School Management System - Production Deployment Guide
-**Institution**: Jamia Islamia, Nawayath Colony, Bhatkal, Karnataka, India
+**Institution**: Jamia Islamia, Bhatkal, Karnataka, India
 
 ---
 
