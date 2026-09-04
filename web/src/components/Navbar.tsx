@@ -47,8 +47,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-md transition-colors">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+    <header className="app-navbar">
+      <div className="flex w-full items-center justify-between">
         {/* Left Side: Brand Logo & Hamburger */}
         <div className="flex items-center gap-3">
           {onToggleSidebar && (

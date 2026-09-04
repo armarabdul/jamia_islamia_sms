@@ -98,33 +98,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {isOpen && (
         <div 
           onClick={onClose}
-          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden animate-fade-in"
+          className="app-sidebar-backdrop"
         />
       )}
 
       {/* Sidebar Container */}
-      <aside className={`
-        fixed lg:static inset-y-0 start-0 z-40
-        w-64 flex flex-col
-        bg-[var(--bg-sidebar)] text-[var(--text-sidebar)]
-        border-e border-[var(--border-subtle)]
-        transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full lg:translate-x-0'}
-      `}>
+      <aside className={`app-sidebar ${isOpen ? 'app-sidebar--open' : ''}`}>
         {/* Mobile Header Close */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10 lg:hidden">
+        <div className="app-sidebar__mobile-header">
           <div className="font-bold text-sm text-emerald-400">Jamia Islamia Menu</div>
           <button 
             onClick={onClose}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10"
+            aria-label="Close Navigation"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation Section */}
-        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-          <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+        <nav className="app-sidebar__nav">
+          <div className="app-sidebar__heading">
             {role} Portal
           </div>
           {links.map((link) => {
@@ -134,26 +128,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 key={link.to}
                 to={link.to}
                 onClick={onClose}
-                className={({ isActive }) => `
-                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold
-                  transition-all duration-150
-                  ${isActive 
-                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-900/30' 
-                    : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                  }
-                `}
+                className={({ isActive }) => `app-sidebar__item ${isActive ? 'app-sidebar__item--active' : ''}`}
               >
-                <Icon className="w-4 h-4 rtl-mirror opacity-90" />
-                <span>{link.label}</span>
+                <Icon className="w-4 h-4 rtl-mirror opacity-90 shrink-0" />
+                <span className="truncate">{link.label}</span>
               </NavLink>
             );
           })}
-        </div>
+        </nav>
 
         {/* Institutional Footer Stamp */}
-        <div className="p-4 border-t border-white/10 bg-black/20">
+        <div className="app-sidebar__footer">
           <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span className="font-semibold text-slate-300">Jamia Islamia</span>
           </div>
           <p className="text-[10px] text-slate-500 mt-0.5">
