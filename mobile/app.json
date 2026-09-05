@@ -41,6 +41,12 @@
           "sounds": []
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6bb9830d-e356-4ed1-938d-5a2ab74a737a"
+      }
+    },
+    "owner": "armarabdul"
   }
 }
