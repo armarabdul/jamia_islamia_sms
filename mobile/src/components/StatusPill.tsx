@@ -4,7 +4,7 @@ import { useTheme } from '../theme';
 
 interface StatusPillProps {
   label: string;
-  status?: 'PRESENT' | 'ABSENT' | 'LATE' | 'EXCUSED' | 'PENDING' | 'SUCCESS' | 'INFO';
+  status?: 'PRESENT' | 'ABSENT' | 'LATE' | 'EXCUSED' | 'PENDING' | 'SUCCESS' | 'INFO' | 'WARNING' | 'ERROR';
   style?: ViewStyle;
 }
 
@@ -17,9 +17,11 @@ export const StatusPill: React.FC<StatusPillProps> = ({ label, status = 'INFO', 
       case 'SUCCESS':
         return { bg: theme.colors.successBg, text: theme.colors.success, border: theme.colors.success };
       case 'ABSENT':
+      case 'ERROR':
         return { bg: theme.colors.errorBg, text: theme.colors.error, border: theme.colors.error };
       case 'LATE':
       case 'PENDING':
+      case 'WARNING':
         return { bg: theme.colors.warningBg, text: theme.colors.warning, border: theme.colors.warning };
       case 'EXCUSED':
         return { bg: theme.colors.infoBg, text: theme.colors.info, border: theme.colors.info };
